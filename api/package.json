@@ -1,0 +1,17 @@
+{
+  "name": "kindred-city-charity-api",
+  "version": "3.0.0",
+  "description": "RESTful API (full CRUD) for the Kindred City Charity dynamic website - PROG2002 A3",
+  "main": "app.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "mysql2": "^3.11.0"
+  }
+}
