@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kindred City Charity | Upcoming Charity Events</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body ng-controller="HomeController as home">
+
+  <!-- Navigation menu (identical on every page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City Charity</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html" class="current">Home</a></li>
+          <li><a href="events.html">Browse Events</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- Static organisation information (hard-coded content) -->
+    <section class="hero">
+      <h1>Local causes, supported by local people</h1>
+      <p class="mission">
+        Kindred City Charity works with neighbours, schools and small businesses to
+        fund food relief, youth mentoring and crisis accommodation across the greater
+        city area. Every event listed below is run by a registered charitable
+        organisation and every dollar raised is reported back to the community.
+      </p>
+      <p class="contact-line">
+        <span>hello@kindredcity.org.au</span>
+        <span>(02) 8810 2244</span>
+        <span>Westport Community Hub, 12 Kindred Street</span>
+      </p>
+    </section>
+
+    <!-- Dynamic upcoming event list loaded from the API -->
+    <section>
+      <hr class="rule">
+      <h2 class="section-title">Upcoming charity events</h2>
+      <p class="lede">
+        Active events that are still to come. Past events are hidden from this list,
+        and any event suspended for a policy breach is removed automatically.
+      </p>
+
+      <p ng-if="home.state.loading" class="message info">Loading upcoming events...</p>
+      <p ng-if="home.state.error" class="message error">{{ home.state.error }}</p>
+
+      <ul ng-if="home.events.length" class="event-list">
+        <li class="event-row" ng-repeat="event in home.events">
+          <div class="date-box">
+            <span class="day">{{ event.event_date | dateBox | splitDay }}</span>
+            <span class="month">{{ event.event_date | dateBox | splitMonth }}</span>
+          </div>
+          <div class="event-body">
+            <p class="event-meta">
+              <span class="tag tag-upcoming">{{ event | statusTag }}</span>
+              <span>{{ event.category_name }}</span> &middot;
+              <span>{{ event.location }}</span>
+            </p>
+            <h3><a href="event.html?id={{ event.event_id }}">{{ event.event_name }}</a></h3>
+            <p class="event-note">{{ event.event_description | limitTo: 150 }}&hellip;</p>
+            <p class="event-links">
+              <a href="event.html?id={{ event.event_id }}">View details &amp; register</a>
+            </p>
+          </div>
+          <img class="thumb" ng-src="img/{{ event.event_image }}" alt="{{ event.event_name }}">
+        </li>
+      </ul>
+
+      <p ng-if="!home.state.loading && !home.events.length && !home.state.error" class="message info">
+        There are no upcoming events at the moment. Please check back soon.
+      </p>
+    </section>
+
+    <p class="footer">
+      Kindred City Charity &middot; ABN 00 000 000 000 &middot; PROG2002 Web Development II,
+      Assignment 3 &middot; Team: 05ZYQ &amp; hahaha135135
+    </p>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/HomeController.js"></script>
+</body>
+</html>
