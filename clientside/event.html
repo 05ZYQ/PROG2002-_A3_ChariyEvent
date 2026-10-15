@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Details | Kindred City Charity</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body ng-controller="EventDetailController as ctrl">
+
+  <!-- Navigation menu (identical on every page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City Charity</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="events.html">Browse Events</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <p ng-if="ctrl.state.loading" class="message info">Loading event details...</p>
+    <p ng-if="ctrl.state.error" class="message error">{{ ctrl.state.error }}</p>
+
+    <!-- Filled in by AngularJS once the API responds -->
+    <div ng-if="ctrl.event" ng-cloak>
+
+      <section class="detail-head">
+        <p class="event-meta">
+          <span class="tag"
+                ng-class="{ 'tag-upcoming': ctrl.statusTag() === 'Upcoming',
+                           'tag-past':      ctrl.statusTag() === 'Past',
+                           'tag-suspended': ctrl.statusTag() === 'Suspended' }">
+            {{ ctrl.statusTag() }}
+          </span>
+          <span>{{ ctrl.event.category_name }}</span> &middot;
+          <span>Hosted by {{ ctrl.event.org_name }}</span>
+        </p>
+        <h1>{{ ctrl.event.event_name }}</h1>
+        <p class="lede">{{ ctrl.event.event_description }}</p>
+      </section>
+
+      <div class="detail-grid">
+        <section class="panel">
+          <h2>Fundraising goal and progress</h2>
+          <div class="progress-bar">
+            <div class="progress-fill" ng-style="{ width: ctrl.progressPercent() + '%' }"></div>
+          </div>
+          <p class="progress-figures">
+            <span>{{ ctrl.event.amount_raised | money }} raised</span>
+            <span>Goal: {{ ctrl.event.fundraising_goal | money }}</span>
+          </p>
+          <p class="lede">{{ ctrl.progressNote() }}</p>
+
+          <h2 style="margin-top:24px;">Registrations for this event</h2>
+          <p class="lede" style="font-size:0.88rem;">
+            Everyone who registered, newest tickets first. In total
+            {{ ctrl.event.registrations.length }} registration(s) bought
+            {{ ctrl.totalTickets() }} ticket(s).
+          </p>
+
+          <p ng-if="!ctrl.event.registrations.length" class="message info">
+            No one has registered for this event yet. Be the first!
+          </p>
+
+          <table ng-if="ctrl.event.registrations.length" class="data-table">
+            <thead>
+              <tr>
+                <th>Registered on</th>
+                <th>Name</th>
+                <th>Contact</th>
+                <th class="num">Tickets</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="r in ctrl.event.registrations">
+                <td>{{ r.registration_date | fullDate }}</td>
+                <td>{{ r.full_name }}</td>
+                <td>{{ r.email }}<br>{{ r.phone }}</td>
+                <td class="num">{{ r.tickets_purchased }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <aside class="panel">
+          <h2>Event information</h2>
+          <ul class="facts">
+            <li><span class="label">Date</span>
+                <span class="value">{{ ctrl.event.event_date | fullDate }}</span></li>
+            <li><span class="label">Start time</span>
+                <span class="value">{{ ctrl.event.start_time | time12 }}</span></li>
+            <li><span class="label">Venue</span>
+                <span class="value">{{ ctrl.event.venue }}</span></li>
+            <li><span class="label">Location</span>
+                <span class="value">{{ ctrl.event.location }}</span></li>
+            <li><span class="label">Category</span>
+                <span class="value">{{ ctrl.event.category_name }}</span></li>
+            <li><span class="label">Hosted by</span>
+                <span class="value">{{ ctrl.event.org_name }}</span></li>
+            <li><span class="label">Ticket price</span>
+                <span class="value price">{{ ctrl.event.ticket_price | price }}</span></li>
+          </ul>
+
+          <!-- Register button now opens the real registration page -->
+          <div class="buttons" style="margin-top:18px;">
+            <a href="register.html?id={{ ctrl.event.event_id }}"><button type="button">Register for this event</button></a>
+          </div>
+
+          <p class="lede" style="margin-top:16px;">
+            Questions about this event? Contact
+            <a href="mailto:{{ ctrl.event.org_email }}">{{ ctrl.event.org_email }}</a>
+            or call {{ ctrl.event.org_phone }}.
+          </p>
+        </aside>
+      </div>
+
+      <!-- Weather forecast from the external Open-Meteo API -->
+      <section class="panel weather-panel" ng-if="ctrl.event.latitude && ctrl.event.longitude">
+        <h2>Weather forecast for the venue (Open-Meteo)</h2>
+        <p ng-if="ctrl.weatherLoading" class="message info">Fetching the 7 day forecast...</p>
+        <p ng-if="ctrl.weatherError" class="message error">{{ ctrl.weatherError }}</p>
+
+        <div ng-if="ctrl.weather.length" class="weather-strip">
+          <div class="weather-day" ng-repeat="day in ctrl.weather">
+            <span class="w-date">{{ day.date | fullDate | limitTo: 12 }}</span>
+            <div class="w-icon">{{ ctrl.weatherIcon(day.weather_code) }}</div>
+            <div class="w-desc">{{ day.description }}</div>
+            <div class="w-temp">{{ day.max_temp }}&deg; / {{ day.min_temp }}&deg;</div>
+            <div class="w-rain">Rain {{ day.rain_chance }}%</div>
+          </div>
+        </div>
+        <p class="weather-note" ng-if="ctrl.weather.length">
+          Forecast source: Open-Meteo (open-meteo.com), retrieved through our Node.js API.
+        </p>
+      </section>
+
+      <p style="margin-top:22px;">
+        <a href="events.html">&larr; Back to the event list</a> &nbsp;|&nbsp;
+        <a href="categories.html">Browse by category</a>
+      </p>
+
+      <p class="footer">
+        Kindred City Charity &middot; PROG2002 Web Development II, Assignment 3
+      </p>
+    </div>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/EventDetailController.js"></script>
+</body>
+</html>
