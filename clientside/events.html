@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Events | Kindred City Charity</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body ng-controller="EventsController as ctrl">
+
+  <!-- Navigation menu (identical on every page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City Charity</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="events.html" class="current">Browse Events</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <h1 class="section-title">Browse &amp; search charity events</h1>
+    <p class="lede">
+      Combine any of the three filters below. Results include every active,
+      unsuspended event still to come. Suspended and past events are never
+      shown to the public.
+    </p>
+
+    <!-- Filter form -->
+    <form class="filters" ng-submit="ctrl.search()" novalidate>
+      <h2 style="margin-bottom:6px;">Filter events</h2>
+
+      <div class="filter-grid">
+        <div class="field">
+          <label for="f-date">Events on or after</label>
+          <input type="date" id="f-date" ng-model="ctrl.criteria.date">
+          <span class="hint">YYYY-MM-DD</span>
+        </div>
+
+        <div class="field">
+          <label for="f-location">Location or venue</label>
+          <input type="text" id="f-location"
+                 ng-model="ctrl.criteria.location"
+                 placeholder="e.g. Westport">
+        </div>
+
+        <div class="field">
+          <label for="f-category">Category</label>
+          <select id="f-category" ng-model="ctrl.criteria.category"
+                  ng-options="c.category_id as c.category_name for c in ctrl.categories">
+            <option value="">All categories</option>
+          </select>
+        </div>
+      </div>
+
+      <p ng-if="ctrl.formError" class="form-error">{{ ctrl.formError }}</p>
+
+      <div class="buttons">
+        <button type="submit">Search</button>
+        <button type="button" class="secondary" ng-click="ctrl.clearFilters()">Clear filters</button>
+      </div>
+    </form>
+
+    <!-- Search status -->
+    <p ng-if="ctrl.state.loading" class="message info">Searching events...</p>
+    <p ng-if="ctrl.state.error" class="message error">{{ ctrl.state.error }}</p>
+    <p ng-if="!ctrl.state.loading && ctrl.searched && !ctrl.results.length && !ctrl.state.error"
+       class="message info">
+      No events match your filters. Try changing or clearing the filters.
+    </p>
+
+    <!-- Results -->
+    <ul ng-if="ctrl.results.length" class="event-list" style="margin-top:20px;">
+      <li class="event-row" ng-repeat="event in ctrl.results">
+        <div class="date-box">
+          <span class="day">{{ event.event_date | dateBox | splitDay }}</span>
+          <span class="month">{{ event.event_date | dateBox | splitMonth }}</span>
+        </div>
+        <div class="event-body">
+          <p class="event-meta">
+            <span class="tag tag-upcoming">{{ event | statusTag }}</span>
+            <span>{{ event.category_name }}</span> &middot;
+            <span>{{ event.location }}</span> &middot;
+            <span>{{ event.event_date | fullDate }} at {{ event.start_time | time12 }}</span>
+          </p>
+          <h3><a href="event.html?id={{ event.event_id }}">{{ event.event_name }}</a></h3>
+          <p class="event-note">{{ event.event_description | limitTo: 160 }}&hellip;</p>
+          <p class="event-links">
+            <a href="event.html?id={{ event.event_id }}">View details &amp; register</a>
+          </p>
+        </div>
+        <img class="thumb" ng-src="img/{{ event.event_image }}" alt="{{ event.event_name }}">
+      </li>
+    </ul>
+
+    <p class="footer">
+      Kindred City Charity &middot; PROG2002 Web Development II, Assignment 3
+    </p>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/EventsController.js"></script>
+</body>
+</html>
