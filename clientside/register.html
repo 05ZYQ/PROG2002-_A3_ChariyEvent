@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Registration | Kindred City Charity</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body ng-controller="RegisterController as ctrl">
+
+  <!-- Navigation menu (identical on every page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City Charity</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="events.html">Browse Events</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <p ng-if="ctrl.state.loading" class="message info">Loading the registration form...</p>
+    <p ng-if="ctrl.state.error" class="message error">{{ ctrl.state.error }}</p>
+
+    <!-- Information about the event the user is registering for -->
+    <div ng-if="ctrl.event" ng-cloak>
+
+      <section class="detail-head">
+        <p class="event-meta">
+          <span class="tag tag-upcoming">{{ ctrl.event | statusTag }}</span>
+          <span>Registration page</span>
+        </p>
+        <h1>Register for: {{ ctrl.event.event_name }}</h1>
+        <p class="lede">
+          {{ ctrl.event.event_date | fullDate }} at {{ ctrl.event.start_time | time12 }}
+          &middot; {{ ctrl.event.venue }}, {{ ctrl.event.location }}
+          &middot; {{ ctrl.event.ticket_price | price }} per ticket
+          &middot; hosted by {{ ctrl.event.org_name }}
+        </p>
+      </section>
+
+      <!-- Confirmation panel shown after a successful POST -->
+      <div class="form-success" ng-if="ctrl.state.success">
+        <h2 style="margin-bottom:6px;">Registration confirmed</h2>
+        <p>{{ ctrl.state.success }}</p>
+        <p>
+          <a href="event.html?id={{ ctrl.event.event_id }}">
+            &larr; View the event and its registration list
+          </a>
+        </p>
+      </div>
+
+      <!-- Registration form (hidden after successful submission) -->
+      <form class="form-panel" name="regForm" ng-submit="ctrl.submit()"
+            ng-if="!ctrl.state.success" novalidate>
+
+        <h2 style="margin-bottom:14px;">Your details</h2>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="r-name">Full name *</label>
+            <input type="text" id="r-name" ng-model="ctrl.form.full_name"
+                   placeholder="e.g. Amelia Hart" required>
+            <span class="form-error" ng-if="ctrl.errors.full_name">{{ ctrl.errors.full_name }}</span>
+          </div>
+
+          <div class="field">
+            <label for="r-email">Email address *</label>
+            <input type="email" id="r-email" ng-model="ctrl.form.email"
+                   placeholder="you@example.com" required>
+            <span class="form-error" ng-if="ctrl.errors.email">{{ ctrl.errors.email }}</span>
+          </div>
+
+          <div class="field">
+            <label for="r-phone">Phone number *</label>
+            <input type="text" id="r-phone" ng-model="ctrl.form.phone"
+                   placeholder="04xx xxx xxx" required>
+            <span class="form-error" ng-if="ctrl.errors.phone">{{ ctrl.errors.phone }}</span>
+          </div>
+
+          <div class="field">
+            <label for="r-date">Registration date *</label>
+            <input type="date" id="r-date" ng-model="ctrl.form.registration_date" required>
+            <span class="hint">Defaults to today</span>
+            <span class="form-error" ng-if="ctrl.errors.registration_date">{{ ctrl.errors.registration_date }}</span>
+          </div>
+
+          <div class="field">
+            <label for="r-tickets">Number of tickets *</label>
+            <input type="number" id="r-tickets" min="1" max="20"
+                   ng-model="ctrl.form.tickets_purchased" required>
+            <span class="hint">Between 1 and 20 tickets</span>
+            <span class="form-error" ng-if="ctrl.errors.tickets_purchased">{{ ctrl.errors.tickets_purchased }}</span>
+          </div>
+
+          <div class="field wide">
+            <label for="r-notes">Notes (optional)</label>
+            <input type="text" id="r-notes" ng-model="ctrl.form.notes"
+                   maxlength="300"
+                   placeholder="Anything the organisers should know?">
+          </div>
+        </div>
+
+        <p class="lede" style="margin-top:14px;">
+          One person may only register once per event (our database enforces this with
+          a unique constraint), but you are welcome to register for as many different
+          events as you like.
+        </p>
+
+        <p ng-if="ctrl.state.error" class="form-error" style="margin-top:10px;">{{ ctrl.state.error }}</p>
+
+        <div class="buttons" style="margin-top:16px;">
+          <button type="submit" ng-disabled="ctrl.state.busy">
+            {{ ctrl.state.busy ? "Submitting..." : "Confirm registration" }}
+          </button>
+          <a href="event.html?id={{ ctrl.event.event_id }}"><button type="button" class="secondary">Cancel</button></a>
+        </div>
+      </form>
+
+      <p class="footer">
+        Kindred City Charity &middot; PROG2002 Web Development II, Assignment 3
+      </p>
+    </div>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/RegisterController.js"></script>
+</body>
+</html>
