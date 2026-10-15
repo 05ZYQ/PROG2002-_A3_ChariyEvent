@@ -1,0 +1,735 @@
+/* ============================================================
+   site.css
+   Kindred City Charity - shared stylesheet
+   Plain, document-style layout: serif headings, flat colours,
+   bordered rows instead of image-heavy card grids.
+   PROG2002 Web Development II - Assignment 2
+   ============================================================ */
+
+:root {
+  --ink: #22313b;
+  --ink-soft: #5b6a73;
+  --line: #d5dadc;
+  --page: #f6f6f3;
+  --paper: #ffffff;
+  --accent: #a8542c;
+  --accent-soft: #f3e8e1;
+  --ok: #2f6b4f;
+  --warn: #8a6a1f;
+  --error: #9c2f26;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background-color: var(--page);
+}
+
+h1, h2, h3 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: normal;
+  line-height: 1.3;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* ---------------- top bar + navigation ---------------- */
+.topbar {
+  background-color: var(--paper);
+  border-bottom: 3px solid var(--ink);
+}
+
+.topbar-inner {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.brand {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.menu {
+  list-style: none;
+  display: flex;
+  gap: 6px;
+  font-size: 0.92rem;
+}
+
+.menu li + li::before {
+  content: "|";
+  color: var(--line);
+  margin-right: 6px;
+}
+
+.menu a {
+  text-decoration: none;
+  color: var(--ink-soft);
+  padding-bottom: 2px;
+  border-bottom: 2px solid transparent;
+}
+
+.menu a:hover {
+  color: var(--ink);
+}
+
+.menu a.current {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+/* ---------------- page shell ---------------- */
+.page {
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 28px 24px 56px;
+}
+
+.lede {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  max-width: 62ch;
+}
+
+.section-title {
+  font-size: 1.35rem;
+  margin-bottom: 4px;
+}
+
+.rule {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 18px 0 22px;
+}
+
+/* ---------------- organisation intro ---------------- */
+.about {
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  padding: 20px 22px;
+  margin-top: 18px;
+}
+
+.about h1 {
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.about .mission {
+  margin-bottom: 14px;
+}
+
+.contact-line {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+}
+
+.contact-line span + span::before {
+  content: "  ·  ";
+}
+
+/* ---------------- event list (row layout) ---------------- */
+.event-list {
+  list-style: none;
+  border-top: 1px solid var(--line);
+}
+
+.event-row {
+  background-color: var(--paper);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 18px;
+  padding: 16px 18px;
+}
+
+.event-row:hover {
+  background-color: #fdfcf9;
+}
+
+.date-box {
+  flex: 0 0 74px;
+  border-right: 1px solid var(--line);
+  padding-right: 12px;
+  text-align: center;
+  color: var(--ink);
+}
+
+.date-box .day {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.date-box .month {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.event-body {
+  flex: 1 1 auto;
+}
+
+.event-body h3 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+.event-body h3 a {
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.event-body h3 a:hover {
+  text-decoration: underline;
+}
+
+.event-meta {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+}
+
+.event-note {
+  font-size: 0.92rem;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.event-links {
+  font-size: 0.9rem;
+}
+
+.event-links a {
+  text-decoration: none;
+}
+
+.event-links a:hover {
+  text-decoration: underline;
+}
+
+.thumb {
+  flex: 0 0 96px;
+  align-self: flex-start;
+  border: 1px solid var(--line);
+}
+
+.thumb img {
+  display: block;
+  width: 96px;
+  height: 60px;
+}
+
+/* ---------------- tags ---------------- */
+.tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border: 1px solid currentColor;
+  margin-right: 6px;
+}
+
+.tag-upcoming { color: var(--ok); }
+.tag-past { color: var(--ink-soft); }
+.tag-suspended { color: var(--warn); }
+
+/* ---------------- filter form ---------------- */
+.filters {
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 20px 22px;
+  margin-top: 18px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px 20px;
+  margin: 14px 0 18px;
+}
+
+.field label {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 8px 9px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--ink);
+  background-color: #fff;
+  border: 1px solid var(--line);
+}
+
+.field input:focus,
+.field select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.field .hint {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 9px 20px;
+  cursor: pointer;
+  border: 1px solid var(--ink);
+  background-color: var(--ink);
+  color: #fff;
+}
+
+button:hover {
+  background-color: #33454f;
+}
+
+button.secondary {
+  background-color: #fff;
+  color: var(--ink);
+}
+
+button.secondary:hover {
+  background-color: #eceeef;
+}
+
+/* ---------------- messages ---------------- */
+.message {
+  border: 1px solid var(--line);
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  margin-top: 16px;
+  background-color: var(--paper);
+}
+
+.message.error {
+  border-color: var(--error);
+  border-left: 4px solid var(--error);
+  color: var(--error);
+}
+
+.message.info {
+  color: var(--ink-soft);
+}
+
+.hidden {
+  /* !important is required because display rules declared later in this
+     file (e.g. .modal-backdrop) would otherwise win the cascade. */
+  display: none !important;
+}
+
+/* ---------------- event detail ---------------- */
+.detail-head {
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--ink);
+  padding: 22px;
+}
+
+.detail-head h1 {
+  font-size: 1.7rem;
+  margin: 6px 0 10px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 22px;
+  margin-top: 20px;
+}
+
+.panel {
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 20px 22px;
+}
+
+.panel h2 {
+  font-size: 1.05rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: Arial, Helvetica, sans-serif;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+  margin-bottom: 14px;
+}
+
+.facts {
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.facts li {
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.facts li:last-child {
+  border-bottom: 0;
+}
+
+.facts .label {
+  color: var(--ink-soft);
+}
+
+.facts .value {
+  text-align: right;
+}
+
+.price {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.35rem;
+}
+
+/* goal vs progress */
+.progress-bar {
+  height: 12px;
+  background-color: #e9e9e4;
+  border: 1px solid var(--line);
+  margin: 10px 0 8px;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: var(--accent);
+  width: 0;
+}
+
+.progress-figures {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---------------- modal ---------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(34, 49, 59, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 200;
+}
+
+.modal {
+  background-color: var(--paper);
+  border: 1px solid var(--ink);
+  max-width: 420px;
+  width: 100%;
+  padding: 24px;
+}
+
+.modal h2 {
+  font-size: 1.15rem;
+  margin-bottom: 10px;
+}
+
+.modal p {
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+
+/* ---------------- footer ---------------- */
+.footer {
+  border-top: 1px solid var(--line);
+  margin-top: 34px;
+  padding-top: 14px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+/* ============================================================
+   A3 additions: weather widget, registration table, forms,
+   hero, category grid, stat boxes.
+   ============================================================ */
+
+/* ---------------- weather widget (Open-Meteo) ---------------- */
+.weather-panel {
+  margin-top: 22px;
+}
+
+.weather-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.weather-day {
+  border: 1px solid var(--line);
+  padding: 10px 8px;
+  text-align: center;
+  background-color: #fdfcf9;
+}
+
+.weather-day .w-date {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+}
+
+.weather-day .w-icon {
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+.weather-day .w-desc {
+  font-size: 0.74rem;
+  color: var(--ink);
+  min-height: 2.4em;
+}
+
+.weather-day .w-temp {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+.weather-day .w-rain {
+  font-size: 0.72rem;
+  color: var(--ok);
+}
+
+.weather-note {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  margin-top: 10px;
+}
+
+/* ---------------- tables (registrations, admin lists) -------- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  background-color: var(--paper);
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid var(--line);
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table thead th {
+  background-color: var(--ink);
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background-color: #faf9f6;
+}
+
+.data-table .num {
+  text-align: right;
+}
+
+/* ---------------- registration form ---------------- */
+.form-panel {
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  padding: 22px 24px;
+  margin-top: 18px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px 20px;
+}
+
+.form-grid .wide {
+  grid-column: 1 / -1;
+}
+
+.form-error {
+  color: var(--error);
+  font-size: 0.85rem;
+  margin-top: 4px;
+}
+
+.form-success {
+  border: 1px solid var(--ok);
+  border-left: 4px solid var(--ok);
+  background-color: #f2f7f4;
+  padding: 14px 16px;
+  margin-top: 16px;
+}
+
+/* ---------------- hero (home page) ---------------- */
+.hero {
+  background-color: var(--ink);
+  color: #fff;
+  border: 1px solid var(--ink);
+  padding: 30px 26px;
+  margin-top: 18px;
+}
+
+.hero h1 {
+  font-size: 1.9rem;
+  color: #fff;
+}
+
+.hero .mission {
+  color: #d9e0e4;
+  max-width: 60ch;
+  margin: 10px 0 16px;
+}
+
+.hero .contact-line {
+  color: #b8c4ca;
+  border-top: 1px solid #475660;
+}
+
+.hero .contact-line span + span::before {
+  color: #6c7a83;
+}
+
+/* ---------------- category grid ---------------- */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.category-card {
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  padding: 18px 20px;
+}
+
+.category-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.category-card p {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+}
+
+/* ---------------- stat boxes (admin + home) ---------------- */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.stat-box {
+  background-color: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--accent);
+  padding: 16px 18px;
+}
+
+.stat-box .stat-value {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.9rem;
+  line-height: 1.1;
+}
+
+.stat-box .stat-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+
+/* ---------------- danger button ---------------- */
+button.danger {
+  background-color: var(--error);
+  border-color: var(--error);
+}
+
+button.danger:hover {
+  background-color: #b23a31;
+}
+
+/* ---------------- small screens ---------------- */
+@media (max-width: 720px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .event-row {
+    flex-wrap: wrap;
+  }
+
+  .thumb {
+    order: 3;
+  }
+
+  .data-table {
+    font-size: 0.82rem;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 6px 8px;
+  }
+}
+
