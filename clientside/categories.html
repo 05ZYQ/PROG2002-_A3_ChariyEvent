@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories | Kindred City Charity</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body ng-controller="CategoriesController as ctrl">
+
+  <!-- Navigation menu (identical on every page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City Charity</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="events.html">Browse Events</a></li>
+          <li><a href="categories.html" class="current">Categories</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <h1 class="section-title">Event categories</h1>
+    <p class="lede">
+      Every charity event belongs to one category. The list below is loaded live
+      from the API and shows how many events are currently organised in each
+      category. Click a category to search its upcoming events.
+    </p>
+
+    <p ng-if="ctrl.state.loading" class="message info">Loading categories...</p>
+    <p ng-if="ctrl.state.error" class="message error">{{ ctrl.state.error }}</p>
+
+    <div class="category-grid" ng-if="ctrl.categories.length">
+      <div class="category-card" ng-repeat="c in ctrl.categories">
+        <h3>{{ c.category_name }}</h3>
+        <p>{{ c.category_description }}</p>
+        <p class="event-links">
+          <span class="tag tag-upcoming">{{ c.event_count }} event(s)</span>
+          <a href="events.html#{{ c.category_id }}"
+             ng-click="ctrl.searchCategory(c.category_id)">
+            View upcoming events
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <!-- Hidden search results panel used by the "View upcoming events" links -->
+    <section ng-if="ctrl.results.length" style="margin-top:28px;">
+      <hr class="rule">
+      <h2 class="section-title">
+        Upcoming events{{ ctrl.selected ? " in category: " + ctrl.selectedName : "" }}
+      </h2>
+      <ul class="event-list">
+        <li class="event-row" ng-repeat="event in ctrl.results">
+          <div class="date-box">
+            <span class="day">{{ event.event_date | dateBox | splitDay }}</span>
+            <span class="month">{{ event.event_date | dateBox | splitMonth }}</span>
+          </div>
+          <div class="event-body">
+            <p class="event-meta">
+              <span class="tag tag-upcoming">{{ event | statusTag }}</span>
+              <span>{{ event.category_name }}</span> &middot; <span>{{ event.location }}</span>
+            </p>
+            <h3><a href="event.html?id={{ event.event_id }}">{{ event.event_name }}</a></h3>
+            <p class="event-note">{{ event.event_description | limitTo: 140 }}&hellip;</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <p class="footer">
+      Kindred City Charity &middot; PROG2002 Web Development II, Assignment 3
+    </p>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/CategoriesController.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About | Kindred City Charity</title>
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body ng-controller="AboutController as ctrl">
+
+  <!-- Navigation menu (identical on every page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City Charity</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="events.html">Browse Events</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="about.html" class="current">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <h1 class="section-title">Who we are</h1>
+    <p class="lede">
+      The charity events on this website are hosted by three partner organisations.
+      Their details below are retrieved live from the API - the same data the
+      admin team manages every day.
+    </p>
+
+    <p ng-if="ctrl.state.loading" class="message info">Loading organisations...</p>
+    <p ng-if="ctrl.state.error" class="message error">{{ ctrl.state.error }}</p>
+
+    <div class="category-grid" ng-if="ctrl.orgs.length">
+      <div class="category-card" ng-repeat="o in ctrl.orgs">
+        <h3>{{ o.org_name }}</h3>
+        <p>{{ o.org_mission }}</p>
+        <p class="event-links">
+          <a href="mailto:{{ o.contact_email }}">{{ o.contact_email }}</a>
+        </p>
+      </div>
+    </div>
+
+    <section style="margin-top:28px;">
+      <hr class="rule">
+      <h2 class="section-title">Why charity events matter</h2>
+      <p class="lede">
+        Last year these three organisations ran more than forty events together,
+        converting ticket sales and donations into food hampers, tutoring hours and
+        crisis accommodation nights. Every registration through this website goes
+        straight into the figures the organisers report back to the community each
+        quarter, so buying a ticket really does show up in the results.
+      </p>
+    </section>
+
+    <p class="footer">
+      Kindred City Charity &middot; PROG2002 Web Development II, Assignment 3
+    </p>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/AboutController.js"></script>
+</body>
+</html>
