@@ -28,9 +28,13 @@
 
 1. cPanel → **MySQL® Databases**：新建数据库，例如 `<user>_charityevents_db`
 2. 新建数据库用户并设置密码，把用户加入该数据库，授予 **ALL PRIVILEGES**
-3. cPanel → **phpMyAdmin**：选中新数据库 → Import → 选择
-   `database/charityevents_db.sql` → 执行（脚本含建表与全部样例数据，
-   字符集 utf8mb4）
+3. cPanel → **phpMyAdmin**：在左侧选中刚创建的数据库 → Import → 选择
+   `database/charityevents_db-cpanel.sql` → 执行（字符集 utf8mb4）
+
+> 请使用 `charityevents_db-cpanel.sql`（phpMyAdmin 专用版）：
+> 它不含 `CREATE DATABASE` / `USE` 语句——cPanel 账号无权通过 SQL
+> 建库，脚本必须在 phpMyAdmin 中已选中的数据库内运行。
+> 原 `charityevents_db.sql` 仅供本地 MySQL Workbench / 命令行使用。
 
 ### 3. 配置 Node.js 应用
 
