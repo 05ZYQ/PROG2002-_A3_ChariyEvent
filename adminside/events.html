@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityAdmin">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Events | Kindred City Admin</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body ng-controller="EventListController as ctrl">
+
+  <!-- Staff navigation menu (identical on every admin page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City &middot; Staff Dashboard</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Dashboard</a></li>
+          <li><a href="events.html" class="current">Events</a></li>
+          <li><a href="new-event.html">New Event</a></li>
+          <li><a href="registrations.html">Registrations</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="../index.html">Public site &rarr;</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <h1 class="section-title">All events</h1>
+    <p class="lede">
+      Every event in the database, including past and suspended listings, with
+      the registrations received so far. Editing opens the update form; deletion
+      is blocked automatically when an event already has registrations.
+    </p>
+
+    <p ng-if="ctrl.state.loading" class="message info">Loading events...</p>
+    <p ng-if="ctrl.state.error" class="message error">{{ ctrl.state.error }}</p>
+    <p ng-if="ctrl.state.success" class="message info">{{ ctrl.state.success }}</p>
+
+    <!-- Filter toggles -->
+    <div class="buttons" style="margin-top:14px;">
+      <button type="button" ng-click="ctrl.reload(true)"
+              ng-class="{ secondary: !ctrl.showAll }">Show all statuses</button>
+      <button type="button" class="secondary" ng-click="ctrl.reload(false)"
+              ng-class="{ secondary: ctrl.showAll }">Upcoming only</button>
+    </div>
+
+    <table class="data-table" ng-if="ctrl.events.length" style="margin-top:18px;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Event</th>
+          <th>Category / Location</th>
+          <th>Status</th>
+          <th class="num">Regs.</th>
+          <th class="num">Tickets</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="e in ctrl.events">
+          <td>{{ e.event_date | fullDate }}<br>{{ e.start_time | time12 }}</td>
+          <td>
+            <a href="edit-event.html?id={{ e.event_id }}">{{ e.event_name }}</a><br>
+            <span style="font-size:0.82rem;">{{ e.org_name }}</span>
+          </td>
+          <td>{{ e.category_name }}<br><span style="font-size:0.82rem;">{{ e.venue }}, {{ e.location }}</span></td>
+          <td>
+            <span class="tag"
+                  ng-class="{ 'tag-upcoming': (e | statusTag) === 'Upcoming',
+                             'tag-past': (e | statusTag) === 'Past',
+                             'tag-suspended': (e | statusTag) === 'Suspended' }">
+              {{ e | statusTag }}
+            </span>
+          </td>
+          <td class="num">{{ e.registration_count }}</td>
+          <td class="num">{{ e.total_tickets }}</td>
+          <td>
+            <a href="edit-event.html?id={{ e.event_id }}">Edit</a> &middot;
+            <a href="" ng-click="ctrl.deleteEvent(e)"
+               style="color:#9c2f26;">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p ng-if="!ctrl.state.loading && !ctrl.events.length" class="message info">
+      No events match the current filter.
+    </p>
+
+    <p class="footer">
+      Kindred City Charity staff area &middot; PROG2002 Web Development II, Assignment 3
+    </p>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/EventListController.js"></script>
+</body>
+</html>
