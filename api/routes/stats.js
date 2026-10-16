@@ -37,9 +37,14 @@ router.get("/", async (req, res) => {
     ]);
 
     res.json({
-      events: events[0],
-      registrations: registrations[0].total,
-      tickets: tickets[0].total,
+      events: {
+        total: Number(events[0].total),
+        upcoming: Number(events[0].upcoming),
+        past: Number(events[0].past),
+        suspended: Number(events[0].suspended),
+      },
+      registrations: Number(registrations[0].total),
+      tickets: Number(tickets[0].total),
       recent_registrations: recent,
     });
   } catch (err) {
