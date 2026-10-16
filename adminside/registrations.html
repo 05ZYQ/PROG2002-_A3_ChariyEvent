@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityAdmin">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registrations | Kindred City Admin</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body ng-controller="RegistrationsController as ctrl">
+
+  <!-- Staff navigation menu (identical on every admin page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City &middot; Staff Dashboard</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Dashboard</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="new-event.html">New Event</a></li>
+          <li><a href="registrations.html" class="current">Registrations</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="../index.html">Public site &rarr;</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <h1 class="section-title">All registrations</h1>
+    <p class="lede">
+      Every registration across every event, newest first. Deleting a registration
+      may be needed when someone cancels - it also unblocks the deletion of an event.
+    </p>
+
+    <!-- Event filter -->
+    <form class="filters" style="margin-top:16px;">
+      <div class="filter-grid" style="grid-template-columns: 1fr auto; align-items:end;">
+        <div class="field">
+          <label for="f-event">Filter by event</label>
+          <select id="f-event" ng-model="ctrl.selectedEventId"
+                  ng-change="ctrl.reload()"
+                  ng-options="e.event_id as e.event_name for e in ctrl.events">
+            <option value="">All events</option>
+          </select>
+        </div>
+      </div>
+    </form>
+
+    <p ng-if="ctrl.state.loading" class="message info">Loading registrations...</p>
+    <p ng-if="ctrl.state.error" class="message error">{{ ctrl.state.error }}</p>
+    <p ng-if="ctrl.state.success" class="message info">{{ ctrl.state.success }}</p>
+
+    <table class="data-table" ng-if="ctrl.registrations.length" style="margin-top:18px;">
+      <thead>
+        <tr>
+          <th>Registered on</th>
+          <th>Person</th>
+          <th>Contact</th>
+          <th>Event</th>
+          <th class="num">Tickets</th>
+          <th>Note</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="r in ctrl.registrations">
+          <td>{{ r.registration_date | fullDate }}</td>
+          <td>{{ r.full_name }}</td>
+          <td>{{ r.email }}<br>{{ r.phone }}</td>
+          <td>
+            <a href="edit-event.html?id={{ r.event_id }}">{{ r.event_name }}</a><br>
+            <span style="font-size:0.82rem;">{{ r.event_date | fullDate }}</span>
+          </td>
+          <td class="num">{{ r.tickets_purchased }}</td>
+          <td>{{ r.notes || "-" }}</td>
+          <td>
+            <a href="" ng-click="ctrl.deleteRegistration(r)" style="color:#9c2f26;">Delete</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p ng-if="!ctrl.state.loading && !ctrl.registrations.length" class="message info">
+      No registrations match the current filter.
+    </p>
+
+    <p class="footer">
+      Kindred City Charity staff area &middot; PROG2002 Web Development II, Assignment 3
+    </p>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/RegistrationsController.js"></script>
+</body>
+</html>
