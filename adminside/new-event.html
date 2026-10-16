@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="charityAdmin">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Event | Kindred City Admin</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body ng-controller="NewEventController as ctrl">
+
+  <!-- Staff navigation menu (identical on every admin page) -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="index.html">Kindred City &middot; Staff Dashboard</a>
+      <nav>
+        <ul class="menu">
+          <li><a href="index.html">Dashboard</a></li>
+          <li><a href="events.html">Events</a></li>
+          <li><a href="new-event.html" class="current">New Event</a></li>
+          <li><a href="registrations.html">Registrations</a></li>
+          <li><a href="categories.html">Categories</a></li>
+          <li><a href="../index.html">Public site &rarr;</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <h1 class="section-title">Create a new charity event</h1>
+    <p class="lede">
+      Fill in every required field (marked with *) and press Save. The event is
+      inserted through <code>POST /api/events</code> and appears immediately in
+      the public event list. Latitude and longitude are optional - they power the
+      Open-Meteo weather forecast on the event page.
+    </p>
+
+    <form class="form-panel" name="eventForm" ng-submit="ctrl.save()" novalidate>
+      <div class="form-grid">
+        <div class="field wide">
+          <label for="e-name">Event name *</label>
+          <input type="text" id="e-name" ng-model="ctrl.form.event_name" maxlength="150" required>
+          <span class="form-error" ng-if="ctrl.errors.event_name">{{ ctrl.errors.event_name }}</span>
+        </div>
+
+        <div class="field wide">
+          <label for="e-desc">Description *</label>
+          <textarea id="e-desc" ng-model="ctrl.form.event_description" rows="4" required></textarea>
+          <span class="form-error" ng-if="ctrl.errors.event_description">{{ ctrl.errors.event_description }}</span>
+        </div>
+
+        <div class="field">
+          <label for="e-date">Event date *</label>
+          <input type="date" id="e-date" ng-model="ctrl.form.event_date" required>
+          <span class="form-error" ng-if="ctrl.errors.event_date">{{ ctrl.errors.event_date }}</span>
+        </div>
+
+        <div class="field">
+          <label for="e-time">Start time *</label>
+          <input type="time" id="e-time" ng-model="ctrl.form.start_time" required>
+          <span class="form-error" ng-if="ctrl.errors.start_time">{{ ctrl.errors.start_time }}</span>
+        </div>
+
+        <div class="field">
+          <label for="e-venue">Venue *</label>
+          <input type="text" id="e-venue" ng-model="ctrl.form.venue" maxlength="150" required>
+          <span class="form-error" ng-if="ctrl.errors.venue">{{ ctrl.errors.venue }}</span>
+        </div>
+
+        <div class="field">
+          <label for="e-location">Location (suburb) *</label>
+          <input type="text" id="e-location" ng-model="ctrl.form.location" maxlength="100" required>
+          <span class="form-error" ng-if="ctrl.errors.location">{{ ctrl.errors.location }}</span>
+        </div>
+
+        <div class="field">
+          <label for="e-category">Category *</label>
+          <select id="e-category" ng-model="ctrl.form.category_id"
+                  ng-options="c.category_id as c.category_name for c in ctrl.categories" required>
+            <option value="">Select a category...</option>
+          </select>
+          <span class="form-error" ng-if="ctrl.errors.category_id">{{ ctrl.errors.category_id }}</span>
+        </div>
+
+        <div class="field">
+          <label for="e-org">Hosted by *</label>
+          <select id="e-org" ng-model="ctrl.form.org_id"
+                  ng-options="o.org_id as o.org_name for o in ctrl.orgs" required>
+            <option value="">Select an organisation...</option>
+          </select>
+          <span class="form-error" ng-if="ctrl.errors.org_id">{{ ctrl.errors.org_id }}</span>
+        </div>
+
+        <div class="field">
+          <label for="e-price">Ticket price ($)</label>
+          <input type="number" id="e-price" min="0" step="0.01" ng-model="ctrl.form.ticket_price">
+        </div>
+
+        <div class="field">
+          <label for="e-goal">Fundraising goal ($)</label>
+          <input type="number" id="e-goal" min="0" step="0.01" ng-model="ctrl.form.fundraising_goal">
+        </div>
+
+        <div class="field">
+          <label for="e-lat">Latitude (for weather)</label>
+          <input type="number" id="e-lat" min="-90" max="90" step="0.000001" ng-model="ctrl.form.latitude">
+          <span class="hint">e.g. -33.8708</span>
+        </div>
+
+        <div class="field">
+          <label for="e-lon">Longitude (for weather)</label>
+          <input type="number" id="e-lon" min="-180" max="180" step="0.000001" ng-model="ctrl.form.longitude">
+          <span class="hint">e.g. 151.2073</span>
+        </div>
+
+        <div class="field">
+          <label for="e-image">Image file name</label>
+          <select id="e-image" ng-model="ctrl.form.event_image"
+                  ng-options="img for img in ctrl.images"></select>
+          <span class="hint">Artwork shown next to the event</span>
+        </div>
+
+        <div class="field">
+          <label for="e-suspended">Status</label>
+          <select id="e-suspended" ng-model="ctrl.form.is_suspended"
+                  ng-options="opt.value as opt.label for opt in ctrl.statusOptions"></select>
+        </div>
+      </div>
+
+      <p ng-if="ctrl.state.error" class="form-error" style="margin-top:12px;">{{ ctrl.state.error }}</p>
+      <p ng-if="ctrl.state.success" class="message info">{{ ctrl.state.success }}</p>
+
+      <div class="buttons" style="margin-top:16px;">
+        <button type="submit" ng-disabled="ctrl.state.busy">
+          {{ ctrl.state.busy ? "Saving..." : "Save event" }}
+        </button>
+        <a href="events.html"><button type="button" class="secondary">Back to event list</button></a>
+      </div>
+    </form>
+
+    <p class="footer">
+      Kindred City Charity staff area &middot; PROG2002 Web Development II, Assignment 3
+    </p>
+  </main>
+
+  <script src="vendor/angular.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers/NewEventController.js"></script>
+</body>
+</html>
