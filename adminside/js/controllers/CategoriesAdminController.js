@@ -33,7 +33,9 @@
     activate();
 
     function activate() {
-      self.reload();
+      // Call the local (hoisted) function - self.reload is only assigned
+      // further down, so calling self.reload() here would throw.
+      reload();
     }
 
     function reload() {
@@ -49,6 +51,9 @@
           self.state.loading = false;
         });
     }
+
+    // Expose the loader so the page can refresh the list if needed.
+    self.reload = reload;
 
     /** Creates the category typed into the "Add" form. */
     self.createCategory = function () {

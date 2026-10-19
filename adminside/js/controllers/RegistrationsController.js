@@ -29,22 +29,6 @@
     self.selectedEventId = "";
     self.state = new PageState();
 
-    activate();
-
-    function activate() {
-      self.state.loading = true;
-
-      AdminApi.listEvents({ includePast: false, includeSuspended: false })
-        .then(function (events) {
-          self.events = events;
-        })
-        .catch(function (error) {
-          self.state.error = error.message;
-        });
-
-      self.reload();
-    }
-
     /** Loads the registration list, filtered when an event is chosen. */
     self.reload = function () {
       self.state.loading = true;
@@ -84,5 +68,23 @@
           self.state.error = error.message;
         });
     };
+
+    // Initial load. Placed after self.reload / self.deleteRegistration are
+    // defined so the controller does not throw "self.reload is not a function".
+    activate();
+
+    function activate() {
+      self.state.loading = true;
+
+      AdminApi.listEvents({ includePast: false, includeSuspended: false })
+        .then(function (events) {
+          self.events = events;
+        })
+        .catch(function (error) {
+          self.state.error = error.message;
+        });
+
+      self.reload();
+    }
   }
 })();

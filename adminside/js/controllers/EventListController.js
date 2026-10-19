@@ -30,12 +30,6 @@
     self.showAll = true;
     self.state = new PageState();
 
-    activate();
-
-    function activate() {
-      self.reload(true);
-    }
-
     /** Loads the list; showAll=false hides past + suspended events. */
     self.reload = function (showAll) {
       self.showAll = showAll;
@@ -82,5 +76,14 @@
           self.state.error = error.message;
         });
     };
+
+    // Initial load. This must run AFTER self.reload is assigned,
+    // otherwise the controller throws "self.reload is not a function"
+    // and the page never leaves the loading state.
+    activate();
+
+    function activate() {
+      self.reload(true);
+    }
   }
 })();
