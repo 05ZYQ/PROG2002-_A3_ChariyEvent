@@ -120,14 +120,16 @@
 
     /** Simple emoji icon per Open-Meteo weather code. */
     self.weatherIcon = function (code) {
-      if (code === 0 || code === 1) return "\u2600\uFE0F";       // clear / mainly clear
-      if (code === 2) return "\u26C5";                            // partly cloudy
-      if (code === 3) return "\u2601\uFE0F";                      // overcast
-      if (code === 45 || code === 48) return "\uF0F5";            // fog -> mist symbol
-      if (code >= 51 && code <= 55) return "\u1F327\uFE0F";       // drizzle
-      if (code >= 61 && code <= 65) return "\u1F327\uFE0F";       // rain
-      if (code >= 80 && code <= 82) return "\u1F327\uFE0F";       // rain showers
-      if (code >= 95) return "\u26C8\uFE0F";                      // thunderstorm
+      if (code === 0 || code === 1) return "\u2600\uFE0F";                  // clear / mainly clear
+      if (code === 2) return "\u26C5";                                       // partly cloudy
+      if (code === 3) return "\u2601\uFE0F";                                 // overcast
+      if (code === 45 || code === 48) return "\uD83C\uDF2B\uFE0F";           // fog
+      if (code >= 51 && code <= 57) return "\uD83C\uDF26\uFE0F";             // drizzle
+      if (code >= 61 && code <= 67) return "\uD83C\uDF27\uFE0F";             // rain
+      if (code >= 71 && code <= 77) return "\u2744\uFE0F";                   // snow
+      if (code >= 80 && code <= 82) return "\uD83C\uDF27\uFE0F";             // rain showers
+      if (code >= 85 && code <= 86) return "\u2744\uFE0F";                   // snow showers
+      if (code >= 95) return "\u26C8\uFE0F";                                 // thunderstorm
       return "\u2B50";
     };
   }
